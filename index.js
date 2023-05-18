@@ -60,7 +60,8 @@ async function run() {
 
 
   app.get('/addedtoys',async (req, res) => {
-    const result=await addedtoys.find().toArray()
+    const limit = parseInt(req.query.limit) || 20; 
+    const result = await addedtoys.find().limit(limit).toArray();
     res.send(result)
 
   })
