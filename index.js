@@ -59,17 +59,16 @@ async function run() {
   })
 
 
-  app.get('/addedtoys',async (req, res) => {
-    let query={}
-    if(req.query.email){
-        query={email: req.query.email}
+  app.get('/addedtoys', async (req, res) => {
+    let query = {};
+    if (req.query.email) {
+      query = { selleremail: req.query.email };
     }
-    const limit = parseInt(req.query.limit) || 20; 
+    const limit = parseInt(req.query.limit) || 20;
     const result = await addedtoys.find(query).limit(limit).toArray();
-    res.send(result)
-
-  })
-
+    res.send(result);
+  });
+  
   app.get('/addedtoys/:id',async (req, res) => {
 
     const id =req.params.id
