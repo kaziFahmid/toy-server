@@ -66,9 +66,12 @@ async function run() {
       query = { selleremail: req.query.email };
     }
     const limit = parseInt(req.query.limit) || 20;
-    const result = await addedtoys.find(query).limit(limit).toArray();
+    const sort = req.query.sort === 'desc' ? { price: -1 } : { price: 1 };
+    
+    const result = await addedtoys.find(query).sort(sort).limit(limit).toArray();
     res.send(result);
   });
+  
   
   app.get('/addedtoys/:id',async (req, res) => {
 
@@ -84,6 +87,28 @@ async function run() {
     const id =req.params.id
     const query={_id: new ObjectId(id)}
     const result=await addedtoys.deleteOne(query)
+    res.send(result)
+
+
+  })
+
+
+  app.put('/addedtoys/:id',async (req, res) => {
+
+    const id =req.params.id
+    const sellerinfo=req.body
+    const filter={_id: new ObjectId(id)}
+    const options = { upsert: true };
+  
+    const updateDoc = {
+      $set: {
+       
+        price:sellerinfo.price,
+        quantity:sellerinfo.quantity,
+        details:sellerinfo.details,
+      },
+    };
+    const result=await addedtoys.updateOne(filter, updateDoc, options);
     res.send(result)
 
 
